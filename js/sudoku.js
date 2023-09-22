@@ -1,5 +1,29 @@
-// The default value for the board state is an easy puzzle, in case there is no 
-// puzzle definition supplied as a URL parameter.
+/*
+MIT License
+
+Copyright (c) 2023 Paul Parks
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+/* The default value for the board state is an easy puzzle, in case there is no 
+puzzle definition supplied as a URL parameter. */
 const boardState = [
     [
         { value: 5, clue: true,   hints: [] },
@@ -110,17 +134,15 @@ document.addEventListener("DOMContentLoaded", function () {
     populateBoardFromState();
     checkBoard();
 
-    // Initialize selected cell
     let selectedRow = 0, selectedCol = 0;
     let selectedCell = document.getElementById(`cell-${selectedRow}-${selectedCol}`);
 
-    if (selectedCell !== null) { // Null check
+    if (selectedCell !== null) { 
         selectedCell.classList.add('selected');
     }
 
     updateBoardStateInURL();
 
-    // For numeric buttons
     const numberButtons = document.querySelectorAll(".number-button");
     numberButtons.forEach((button) => {
         button.addEventListener("click", function (event) {
@@ -128,14 +150,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (isEditingMode || numberElement.getAttribute('data-editable') !== 'false') {
                 const digit = parseInt(this.innerText, 10);
-                updateNumberCell(digit, selectedCell, isHintMode, isEditingMode);
+                updateNumberCell(digit, selectedCell, isHintMode);
             }
         });
     });
 
-    // Toggle edit mode
     document.getElementById("toggleEditMode").addEventListener("click", function (event) {
-        isEditingMode = !isEditingMode; // Toggle the state
+        isEditingMode = !isEditingMode; 
         const resetGame = document.getElementById("resetGame");
         const clearBoard = document.getElementById("clearBoard");
 
@@ -153,22 +174,26 @@ document.addEventListener("DOMContentLoaded", function () {
         checkBoard();
     });
 
-    // For toggling between Edit and Hint modes
-    document.getElementById("toggleEditHintMode").addEventListener("click", function (event) {
-        isHintMode = !isHintMode; // Toggle the state
+    function toggleHint() {
+        isHintMode = !isHintMode; 
+        const button = document.getElementById("toggleEditHintMode")
 
         if (isHintMode) {
-            this.classList.add('selected');
+            button.classList.add('selected');
         } else {
-            this.classList.remove('selected');
+            button.classList.remove('selected');
         }
 
         selectCell(selectedRow, selectedCol);
+    }
+
+    document.getElementById("toggleEditHintMode").addEventListener("click", function (event) {
+        toggleHint();
     });
 
     let helpDisplay = false;
 
-    document.getElementById("helpButton").addEventListener("click", function (event) {
+    function toggleHelp() {
         helpDisplay = !helpDisplay;
         const helpText = document.getElementById("helpText");
         const helpButton = document.getElementById("helpButton");
@@ -181,6 +206,10 @@ document.addEventListener("DOMContentLoaded", function () {
             helpText.style.display = "none";
             helpButton.classList.remove("selected");
         }
+    }
+
+    document.getElementById("helpButton").addEventListener("click", function (event) {
+        toggleHelp();
     });
 
     document.getElementById("resetGame").addEventListener("click", function (event) {
@@ -217,11 +246,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function selectCell(row, col) {
-        selectedCell.classList.remove('selected'); // Unselect the current cell first
+        selectedCell.classList.remove('selected'); 
         selectedRow = row;
         selectedCol = col;
         selectedCell = document.getElementById(`cell-${selectedRow}-${selectedCol}`);
-        selectedCell.classList.add('selected'); // Select the new cell
+        selectedCell.classList.add('selected'); 
 
         for (var digit = 0; digit < 10; ++digit) {
             const hintElement = document.getElementById(`num-${digit}`);
@@ -250,8 +279,8 @@ document.addEventListener("DOMContentLoaded", function () {
     function clearCell(row, col) {
         const numberElement = selectedCell.querySelector(".main-number");
         const hints = selectedCell.querySelectorAll(".hint");
-        updateBoard(row, col, 0); // Update the boardState array
-        drawNumber(0, numberElement, hints); // Clear the main number
+        updateBoard(row, col, 0); 
+        drawNumber(0, numberElement, hints); 
         checkBoard();
         selectCell(row, col);
         const href = updateBoardStateInURL();
@@ -268,47 +297,78 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.addEventListener('keydown', function (event) {
         console.log(event.code);
-
         if (event.altKey) return;
-        const isShiftPressed = event.shiftKey;
 
-        selectedCell.classList.remove('selected'); // Unselect the current cell first
+        if (event.key === '?') {
+            toggleHelp();
+            return;
+        }
+
+        if (event.key === 'h' || event.key === 'H') {
+            toggleHint();
+        }
+
+        const isShiftPressed = event.shiftKey;
+        const isHintEntry = isShiftPressed || isHintMode;
+
+        selectedCell.classList.remove('selected'); 
         const numberElement = selectedCell.querySelector(".main-number");
 
         if (isEditingMode || numberElement.getAttribute('data-editable') !== 'false') {
-            if (event.code === 'Delete' || event.code === 'Backspace') {
+            if (event.code === 'Delete' || event.code === 'Backspace' || (event.code === 'NumpadDecimal') && !event.getModifierState("NumLock")) {
                 clearCell(selectedRow, selectedCol);
             }
             else if (event.code.startsWith('Digit')) {
-                const digit = parseInt(event.code.replace('Digit', ''), 10); // Extract the number
-                const isHintEntry = isShiftPressed || isHintMode;
-
-                updateNumberCell(digit, selectedCell, isHintEntry, isEditingMode);
+                const digit = parseInt(event.code.replace('Digit', ''), 10); 
+                updateNumberCell(digit, selectedCell, isHintEntry);
             }
-            else if (event.code.startsWith('Numpad')) {
-                const digit = parseInt(event.code.replace('Numpad', ''), 10); // Extract the number
-                const isHintEntry = isShiftPressed || isHintMode;
+            else if (event.code.startsWith('Numpad') && event.getModifierState("NumLock")) {
+                const digit = parseInt(event.code.replace('Numpad', ''), 10); 
 
-                updateNumberCell(digit, selectedCell, isHintEntry, isEditingMode);
+                if (Number.isInteger(digit) && digit >= 1 && digit <= 9) {
+                    updateNumberCell(digit, selectedCell, isHintEntry);
+                }
             }
         }
 
-        switch (event.code) {
-            case 'ArrowUp':
-                selectedRow = (selectedRow - 1 + 9) % 9;
-                break;
-            case 'ArrowDown':
-                selectedRow = (selectedRow + 1) % 9;
-                break;
-            case 'ArrowLeft':
-                selectedCol = (selectedCol - 1 + 9) % 9;
-                break;
-            case 'ArrowRight':
-                selectedCol = (selectedCol + 1) % 9;
-                break;
-            default:
-                selectedCell.classList.add('selected'); // Re-select if no operation performed
-                return;
+        /* Yeah, I could probably fix the following code so that the logic isn't duplicated, 
+        but that would mean creating four tiny functions. If I ever DO modify the selection 
+        logic, I'll make the abstractions then. */
+
+        if (event.code.startsWith('Arrow')) {
+            switch (event.code) {
+                case 'ArrowUp':
+                    selectedRow = (selectedRow - 1 + 9) % 9;
+                    break;
+                case 'ArrowDown':
+                    selectedRow = (selectedRow + 1) % 9;
+                    break;
+                case 'ArrowLeft':
+                    selectedCol = (selectedCol - 1 + 9) % 9;
+                    break;
+                case 'ArrowRight':
+                    selectedCol = (selectedCol + 1) % 9;
+                    break;
+                default:
+                    selectedCell.classList.add('selected'); 
+                    return;
+            }
+        }
+        else if (event.code.startsWith('Numpad') && !event.getModifierState("NumLock")) {
+            switch (event.code) {
+                case 'Numpad8':
+                    selectedRow = (selectedRow - 1 + 9) % 9;
+                    break;
+                case 'Numpad2':
+                    selectedRow = (selectedRow + 1) % 9;
+                    break;
+                case 'Numpad4':
+                    selectedCol = (selectedCol - 1 + 9) % 9;
+                    break;
+                case 'Numpad6':
+                    selectedCol = (selectedCol + 1) % 9;
+                    break;
+            }
         }
 
         selectCell(selectedRow, selectedCol);
@@ -318,8 +378,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const numberElement = selectedCell.querySelector(".main-number");
         const hints = selectedCell.querySelectorAll(".hint");
 
-        numberElement.classList.remove('invalid-number'); // Reset invalid highlight
-        numberElement.classList.remove('game-number'); // Reset game number highlight
+        numberElement.classList.remove('invalid-number'); 
+        numberElement.classList.remove('game-number'); 
 
         if (isHintEntry) {
             let hintsArray = getHints(selectedRow, selectedCol);
@@ -327,11 +387,11 @@ document.addEventListener("DOMContentLoaded", function () {
             const hintElement = selectedCell.querySelector(`.hint:nth-child(${digit})`);
 
             if (hintIndex === -1) {
-                hintsArray.push(digit); // Add the hint if it does not exist
-                if (hintElement !== null) hintElement.classList.add('active-hint'); // Visual update
+                hintsArray.push(digit); 
+                if (hintElement !== null) hintElement.classList.add('active-hint'); 
             } else {
-                hintsArray.splice(hintIndex, 1); // Remove the hint if it exists
-                if (hintElement !== null) hintElement.classList.remove('active-hint'); // Visual update
+                hintsArray.splice(hintIndex, 1); 
+                if (hintElement !== null) hintElement.classList.remove('active-hint'); 
             }
 
             updateHints(selectedRow, selectedCol, hintsArray);
@@ -399,8 +459,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     const hintElement = cell.querySelector(`.hint:nth-child(${digit})`);
                     if (hintElement !== null) hintElement.classList.add('active-hint');
                 });
-
-                // numberElement.textContent = cellData.value || "";
 
                 if (cellData.clue) {
                     numberElement.className = 'main-number static-number';
@@ -479,28 +537,23 @@ document.addEventListener("DOMContentLoaded", function () {
         const boardStateString = params.get('board');
 
         if (!boardStateString) {
-            return; // Exit if no board state is found in the URL
+            return; 
         }
 
-        // Split the boardStateString into rows
         const rows = boardStateString.split('-');
 
         for (let row = 0; row < rows.length; row++) {
-            // Split each row string into columns
             const cols = rows[row].split('.');
 
             for (let col = 0; col < cols.length; col++) {
-                // Parse each cell string into its value, status, and hints components
                 const { value, status, hints } = parseCell(cols[col]);
 
-                // Update boardState at the corresponding row and column
                 boardState[row][col].value = value;
                 boardState[row][col].clue = (status === 'C');
                 boardState[row][col].hints = hints;
             }
         }
 
-        // A function to parse individual cell strings into their value, status, and hints components
         function parseCell(cellString) {
             const value = parseInt(cellString.charAt(0), 10);
             const status = cellString.charAt(1);
@@ -544,26 +597,20 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function drawNumber(number, numberElement, hints) {
-        // Clear any validation styling
         numberElement.classList.remove('invalid-number');
 
         if (number !== 0) {
-            // Set the text content
             numberElement.textContent = number;
 
-            // Hide all hint numbers
             hints.forEach(function (hint) {
                 hint.style.visibility = "hidden";
             });
         } else {
-            // Clear the text content
             numberElement.textContent = "";
 
-            // Reset the class and attribute
             numberElement.className = 'main-number';
             numberElement.setAttribute('data-editable', 'true');
 
-            // Restore all hint numbers
             hints.forEach(function (hint) {
                 hint.style.visibility = "visible";
             });

@@ -1,10 +1,33 @@
+<!--
+MIT License
+
+Copyright (c) 2023 Paul Parks
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
 <!DOCTYPE html>
 <html lang="en-US">
 
 <head>
     <title>Sudoku</title>
-    <meta http-equiv="date" content="2023-09-21T23:09:00" />
-    <meta http-equiv="last-modified" content="2023-09-21T23:09:00" />
+    <meta http-equiv="date" content="2023-09-22T08:00:00" />
+    <meta http-equiv="last-modified" content="2023-09-22T08:00:00" />
     <meta name="comments-enabled" content="true" />
     <meta name="comments-allowed" content="true" />
     <link rel="stylesheet" href="/css/sudoku.css" />
@@ -99,7 +122,19 @@
         <div id="cell-8-7" class="cell cell-bottom"><div class="hints"><div class="hint">1</div><div class="hint">2</div><div class="hint">3</div><div class="hint">4</div><div class="hint">5</div><div class="hint">6</div><div class="hint">7</div><div class="hint">8</div><div class="hint">9</div></div><div class="main-number"></div></div>
         <div id="cell-8-8" class="cell cell-right cell-bottom"><div class="hints"><div class="hint">1</div><div class="hint">2</div><div class="hint">3</div><div class="hint">4</div><div class="hint">5</div><div class="hint">6</div><div class="hint">7</div><div class="hint">8</div><div class="hint">9</div></div><div class="main-number"></div></div>
         <div id="helpText">
-            <p>This is the help text.</p>
+            <p><a href="https://en.wikipedia.org/wiki/Sudoku" target="_blank">Sudoku</a> by Paul Parks</p>
+            <ul>
+                <li>To select a cell on the game board, click or touch any cell or use the arrow keys to move the selection.</li>
+                <li>To enter a number, click or touch one of the number buttons below the game board or type a number.</li>
+                <li>To enter a hint, click or touch the &#x270F; button, or hold the SHIFT key while typing a number.</li>
+                <li>To clear a cell, click or touch the &#x274C; button, or press the DELETE key or BACKSPACE key.</li>
+                <li>To reset the game to its initial state, click or touch the "Restart Game" button.</li>
+                <li>To create a new game, click or touch the "Switch to Editor" button.</li>
+                <li>To remove this help text, click or touch the &#x2753; button or press the ? key.</li>
+            </ul>
+            <p>Game state is saved in the browser history. Use your browser's back and forward functions to undo and redo entries.</p>
+            <p>To share your game with someone, simply share the current page. All of the clues, hints, and number entries will be preserved.</p>
+            <p>Licensed under <a href="https://mit-license.org/" target="_blank">MIT License</a>. Source available on <a href="https://github.com/parkscomputing/sudoku" target="_blank">GitHub</a>.</p>
         </div>
     </div>
 
