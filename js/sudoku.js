@@ -24,115 +24,126 @@ SOFTWARE.
 
 /* The default value for the board state is an easy puzzle, in case there is no 
 puzzle definition supplied as a URL parameter. */
-const boardState = [
+let boardState = [
     [
-        { value: 5, clue: true,   hints: [] },
-        { value: 3, clue: true,   hints: [] },
         { value: 0, clue: false,  hints: [] },
         { value: 0, clue: false,  hints: [] },
-        { value: 7, clue: true,   hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
         { value: 0, clue: false,  hints: [] },
         { value: 0, clue: false,  hints: [] },
         { value: 0, clue: false,  hints: [] },
         { value: 0, clue: false,  hints: [] }
     ],
     [
-        { value: 6, clue: true,   hints: [] },
         { value: 0, clue: false,  hints: [] },
         { value: 0, clue: false,  hints: [] },
-        { value: 1, clue: true,   hints: [] },
-        { value: 9, clue: true,   hints: [] },
-        { value: 5, clue: true,   hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
         { value: 0, clue: false,  hints: [] },
         { value: 0, clue: false,  hints: [] },
         { value: 0, clue: false,  hints: [] }
     ],
     [
         { value: 0, clue: false,  hints: [] },
-        { value: 9, clue: true,   hints: [] },
-        { value: 8, clue: true,   hints: [] },
         { value: 0, clue: false,  hints: [] },
         { value: 0, clue: false,  hints: [] },
         { value: 0, clue: false,  hints: [] },
         { value: 0, clue: false,  hints: [] },
-        { value: 6, clue: true,   hints: [] },
-        { value: 0, clue: false,  hints: [] }
-    ],
-    [
-        { value: 8, clue: true,   hints: [] },
         { value: 0, clue: false,  hints: [] },
         { value: 0, clue: false,  hints: [] },
         { value: 0, clue: false,  hints: [] },
-        { value: 6, clue: true,   hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 3, clue: true,   hints: [] }
-    ],
-    [
-        { value: 4, clue: true,   hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 8, clue: true,   hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 3, clue: true,   hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 1, clue: true,   hints: [] }
-    ],
-    [
-        { value: 7, clue: true,   hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 2, clue: true,   hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 6, clue: true,   hints: [] }
-    ],
-    [
-        { value: 0, clue: false,  hints: [] },
-        { value: 6, clue: true,   hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 2, clue: true,   hints: [] },
-        { value: 8, clue: true,   hints: [] },
         { value: 0, clue: false,  hints: [] }
     ],
     [
         { value: 0, clue: false,  hints: [] },
         { value: 0, clue: false,  hints: [] },
         { value: 0, clue: false,  hints: [] },
-        { value: 4, clue: true,   hints: [] },
-        { value: 1, clue: true,   hints: [] },
-        { value: 9, clue: true,   hints: [] },
         { value: 0, clue: false,  hints: [] },
         { value: 0, clue: false,  hints: [] },
-        { value: 5, clue: true,   hints: [] }
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] }
     ],
     [
         { value: 0, clue: false,  hints: [] },
         { value: 0, clue: false,  hints: [] },
         { value: 0, clue: false,  hints: [] },
         { value: 0, clue: false,  hints: [] },
-        { value: 8, clue: true,   hints: [] },
         { value: 0, clue: false,  hints: [] },
         { value: 0, clue: false,  hints: [] },
-        { value: 7, clue: true,   hints: [] },
-        { value: 9, clue: true,   hints: [] }
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] }
+    ],
+    [
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] }
+    ],
+    [
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] }
+    ],
+    [
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] }
+    ],
+    [
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] },
+        { value: 0, clue: false,  hints: [] }
     ]
 ];
 
 let isEditingMode = false;
 let isHintMode = false;
 
+
 document.addEventListener("DOMContentLoaded", function () {
-    getBoardStateFromURL();
-    populateBoardFromState();
-    checkBoard();
+    const difficultyDropdown = document.getElementById("difficultyDropdown");
+    const params = getUrlParameters();
+
+    if (setBoardStateFromUrl(params)) {
+        populateBoardFromState();
+        checkBoard();
+        updateBoardStateInURL();
+    }
+    else {
+        const difficulty = getDifficultyFromUrl(params);
+        difficultyDropdown.value = difficulty;
+        generateNewBoard(difficulty);
+    }
 
     let selectedRow = 0, selectedCol = 0;
     let selectedCell = document.getElementById(`cell-${selectedRow}-${selectedCol}`);
@@ -141,9 +152,225 @@ document.addEventListener("DOMContentLoaded", function () {
         selectedCell.classList.add('selected');
     }
 
-    updateBoardStateInURL();
+    // Event listener for the button
+    document.getElementById("generateBoardButton").addEventListener("click", function() {
+        const selectedDifficulty = difficultyDropdown.value;
+        generateNewBoard(selectedDifficulty);
+    });
+
+    document.getElementById("solveBoard").addEventListener("click", function() {
+        solveBoard();
+        populateBoardFromState();
+        checkBoard();
+        updateBoardStateInURL();
+    });
+
+    function generateNewBoard(difficulty) {
+        while (true) {
+            clearGameBoard();
+            fillBoard();
+            removeNumbers(difficulty);
+            if (checkUnique()) {
+                break;
+            }
+        }
+
+        populateBoardFromState();
+        checkBoard();
+        updateBoardStateInURL();
+    }
+
+    function getShuffledArray() {
+        let array = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+
+        return array;
+    }
+
+    function fillBoard() {
+        const n = 9;
+
+        function backtrack(row, col) {
+            if (row === n) {
+                return true;  // Entire board has been filled
+            }
+
+            if (boardState[row][col].value !== 0) {
+                return (col === n - 1) ? backtrack(row + 1, 0) : backtrack(row, col + 1);
+            }
+
+            const numbers = getShuffledArray();
+
+            for (const num of numbers) {
+                if (isValid(boardState, row, col, num)) {
+                    boardState[row][col].value = num;
+                    boardState[row][col].clue = true;  // Marking the number as a clue
+                
+                    if ((col === n - 1) ? backtrack(row + 1, 0) : backtrack(row, col + 1)) {
+                        return true;  // Continue if the current number allows for a solution
+                    }
+                    boardState[row][col].value = 0;
+                    boardState[row][col].clue = false;  // Resetting the clue flag
+                }
+            }
+        
+            return false;  // If no number fits in the current cell, backtrack
+        }
+
+        return backtrack(0, 0);  // Start backtracking from the first cell
+    }
+
+    function solveOrCheckUnique(fillBoard = false) {
+        const solutions = [];
+        let solvedBoard = [];
+
+        function cloneBoardState() {
+            return boardState.map(row => row.map(cell => Object.assign({}, cell)));
+        }
+
+        function backtrack(row, col) {
+            if (row === 9) {
+                if (fillBoard) {
+                    solvedBoard = cloneBoardState();  // Store the solution when solving
+                }
+                solutions.push(1); // Add a marker for a solution
+                return;
+            }
+
+            if (solutions.length >= 2) {
+                return; // Exit early if we have more than one solution
+            }
+
+            if (boardState[row][col].value === 0) {
+                for (let num = 1; num <= 9; num++) {
+                    if (isValid(boardState, row, col, num)) {
+                        boardState[row][col].value = num;
+                        if (col === 8) {
+                            backtrack(row + 1, 0);
+                        } else {
+                            backtrack(row, col + 1);
+                        }
+                        boardState[row][col].value = 0;
+                    }
+                }
+            } else {
+                if (col === 8) {
+                    backtrack(row + 1, 0);
+                } else {
+                    backtrack(row, col + 1);
+                }
+            }
+        }
+
+        backtrack(0, 0);
+
+        if (fillBoard && solutions.length === 1) {
+            boardState = solvedBoard; // Update boardState with the solved board
+            return true;  // Indicate that the board was successfully solved
+        }
+
+        return solutions.length === 1; // Return true if only one solution exists, false otherwise
+    }
+
+    function checkUnique(board) {
+        return solveOrCheckUnique(board) === 1;
+    }
+
+    function solveBoard(board) {
+        return solveOrCheckUnique(board, true);
+    }
+
+
+
+    function isValid(board, row, col, num) {
+        for (let x = 0; x < 9; x++) {
+            if (board[row][x].value === num) return false;
+            if (board[x][col].value === num) return false;
+        }
+
+        const startRow = Math.floor(row / 3) * 3;
+        const startCol = Math.floor(col / 3) * 3;
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (board[i + startRow][j + startCol].value === num) return false;
+            }
+        }
+        return true;
+    }
+
+    function removeNumbers(difficulty) {
+        let removalCount;
+
+        switch (difficulty) {
+            case "easy":
+                removalCount = 30;
+                break;
+            case "medium":
+                removalCount = 40;
+                break;
+            case "hard":
+                removalCount = 50;
+                break;
+            case "veryhard":
+                removalCount = 60;
+                break;
+            default:
+                removalCount = 40; // Default to medium
+        }
+
+        let removals = 0;
+        const visited = new Set();
+
+        while (removals < removalCount) {
+            let candidates = [];
+
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 9; col++) {
+                    if (boardState[row][col].value !== 0 && !visited.has(`${row},${col}`)) {
+                        let possibleValues = 0;
+
+                        for (let num = 1; num <= 9; num++) {
+                            if (isValid(boardState, row, col, num)) {
+                                possibleValues++;
+                            }
+                        }
+
+                        candidates.push({
+                            row: row,
+                            col: col,
+                            values: possibleValues
+                        });
+                    }
+                }
+            }
+
+            // Sort cells based on the number of possible values (ascending)
+            candidates.sort((a, b) => a.values - b.values);
+
+            if (candidates.length === 0) {
+                break;
+            }
+
+            let { row, col } = candidates[0];
+
+            let originalValue = boardState[row][col].value;
+            boardState[row][col].value = 0;
+
+            if (checkUnique(boardState)) {
+                removals++;
+                visited.add(`${row},${col}`);
+            } else {
+                boardState[row][col].value = originalValue;
+            }
+        }
+    }
 
     const numberButtons = document.querySelectorAll(".number-button");
+
     numberButtons.forEach((button) => {
         button.addEventListener("click", function (event) {
             const numberElement = selectedCell.querySelector(".main-number");
@@ -161,11 +388,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const clearBoard = document.getElementById("clearBoard");
 
         if (isEditingMode) {
-            this.textContent = "Switch to Gameplay";
+            this.textContent = "Gameplay";
             resetGame.style.display = "none";
             clearBoard.style.display = "inline-block";
         } else {
-            this.textContent = "Switch to Editor";
+            this.textContent = "Editor";
             resetGame.style.display = "inline-block";
             clearBoard.style.display = "none";
         }
@@ -226,11 +453,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
         populateBoardFromState();
         checkBoard();
-        const href = updateBoardStateInURL();
-        window.history.pushState("", "", href);
+        updateBoardStateInURL();
     });
 
     document.getElementById("clearBoard").addEventListener("click", function (event) {
+        clearGameBoard();
+
+        populateBoardFromState();
+        checkBoard();
+        updateBoardStateInURL();
+
+    });
+
+    function clearGameBoard() {
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
                 const cellData = boardState[row][col];
@@ -239,11 +474,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 cellData.hints = [];
             }
         }
-
-        populateBoardFromState();
-        const href = updateBoardStateInURL();
-        window.history.pushState("", "", href);
-    });
+    }
 
     function selectCell(row, col) {
         selectedCell.classList.remove('selected'); 
@@ -283,8 +514,7 @@ document.addEventListener("DOMContentLoaded", function () {
         drawNumber(0, numberElement, hints); 
         checkBoard();
         selectCell(row, col);
-        const href = updateBoardStateInURL();
-        window.history.pushState("", "", href);
+        updateBoardStateInURL();
     }
 
     document.getElementById("deleteEntry").addEventListener("click", function (event) {
@@ -403,12 +633,12 @@ document.addEventListener("DOMContentLoaded", function () {
         checkBoard();
         selectCell(selectedRow, selectedCol);
 
-        const href = updateBoardStateInURL();
-        window.history.pushState("", "", href);
+        updateBoardStateInURL();
     }
 
     window.addEventListener('popstate', function (event) {
-        getBoardStateFromURL();
+        const params = getUrlParameters();
+        setBoardStateFromUrl(params);
         populateBoardFromState();
         checkBoard();
         updateBoardStateInURL();
@@ -527,17 +757,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const linkElement = document.getElementById("shareableLink");
         linkElement.href = newURL.toString();
+        window.history.pushState("", "", linkElement.href);
         return linkElement.href;
     }
 
 
-    function getBoardStateFromURL() {
-        // Extract board state string from URL
-        const params = new URLSearchParams(window.location.search);
+    function getUrlParameters() {
+        return new URLSearchParams(window.location.search);
+    }
+
+    function setBoardStateFromUrl(params) {
         const boardStateString = params.get('board');
 
         if (!boardStateString) {
-            return; 
+            return false; 
         }
 
         const rows = boardStateString.split('-');
@@ -554,13 +787,24 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        function parseCell(cellString) {
-            const value = parseInt(cellString.charAt(0), 10);
-            const status = cellString.charAt(1);
-            const hints = cellString.slice(2).split('').map(Number);
+        return true;
+    }
 
-            return { value, status, hints };
+    function getDifficultyFromUrl(params) {
+        const difficulty = params.get("difficulty");
+        if (!difficulty) {
+            return "medium";
         }
+
+        return difficulty;
+    }
+
+    function parseCell(cellString) {
+        const value = parseInt(cellString.charAt(0), 10);
+        const status = cellString.charAt(1);
+        const hints = cellString.slice(2).split('').map(Number);
+
+        return { value, status, hints };
     }
 
     function isValidMove(row, col, value) {

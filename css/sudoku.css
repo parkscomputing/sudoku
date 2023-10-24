@@ -183,7 +183,8 @@ SOFTWARE.
 }
 
 .mode-controls {
-    margin-top: 1em;
+    margin-top: .5em;
+    margin-bottom: .5em;
     width: 100%;
 }
 
@@ -200,3 +201,20 @@ SOFTWARE.
         font-size: calc(.6vw + .7vh);
     }
 }
+
+/* Resetting default padding and margin */
+button {
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-family: inherit; /* ensure the font is consistent */
+    font-size: 100%; /* ensure the font size is consistent */
+    line-height: 1.15; /* adjust as necessary for your design */
+    text-align: center; /* center the text horizontally */
+    display: inline-block;
+    color: #333; /* or whatever color you prefer */
+    cursor: pointer;
+    vertical-align: middle; /* center the text vertically */
+    padding: 8px 12px; /* adjust as necessary for your design */
+}
+
