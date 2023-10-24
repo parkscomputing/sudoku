@@ -26,10 +26,8 @@ SOFTWARE.
 
 <head>
     <title>Sudoku</title>
-    <meta http-equiv="date" content="2023-09-22T08:00:00" />
-    <meta http-equiv="last-modified" content="2023-09-22T08:00:00" />
-    <meta name="comments-enabled" content="true" />
-    <meta name="comments-allowed" content="true" />
+    <meta name="comments-enabled" content="false" />
+    <meta name="comments-allowed" content="false" />
     <link rel="stylesheet" href="/css/sudoku.css" />
     <style>
     </style>
@@ -39,8 +37,25 @@ SOFTWARE.
 <body>
     <h1>Sudoku</h1>
 
+    <div class="mode-controls">
+        <select id="difficultyDropdown">
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+            <option value="veryhard">Very Hard</option>
+        </select>
+
+        <button id="generateBoardButton">New</button>
+        <button id="resetGame" type="button">Restart</button>
+        <button id="clearBoard" type="button">Clear</button>
+        <button id="toggleEditMode" type="button">Editor</button>
+        <button id="solveBoard" type="button">Solve</button>
+        <br />
+        <a id="shareableLink" href="#">Link to Current Board</a>
+    </div>
+
     <div class="sudoku-board" id="sudoku-board">
-        <div id="cell-0-0" class="selected cell cell-left cell-top"><div class="hints"><div class="hint">1</div><div class="hint">2</div><div class="hint">3</div><div class="hint">4</div><div class="hint">5</div><div class="hint">6</div><div class="hint">7</div><div class="hint">8</div><div class="hint">9</div></div><div class="main-number"></div></div>
+        <div id="cell-0-0" class="cell cell-left cell-top"><div class="hints"><div class="hint">1</div><div class="hint">2</div><div class="hint">3</div><div class="hint">4</div><div class="hint">5</div><div class="hint">6</div><div class="hint">7</div><div class="hint">8</div><div class="hint">9</div></div><div class="main-number"></div></div>
         <div id="cell-0-1" class="cell cell-top"><div class="hints"><div class="hint">1</div><div class="hint">2</div><div class="hint">3</div><div class="hint">4</div><div class="hint">5</div><div class="hint">6</div><div class="hint">7</div><div class="hint">8</div><div class="hint">9</div></div><div class="main-number"></div></div>
         <div id="cell-0-2" class="cell cell-top cell-right"><div class="hints"><div class="hint">1</div><div class="hint">2</div><div class="hint">3</div><div class="hint">4</div><div class="hint">5</div><div class="hint">6</div><div class="hint">7</div><div class="hint">8</div><div class="hint">9</div></div><div class="main-number"></div></div>
         <div id="cell-0-3" class="cell cell-top"><div class="hints"><div class="hint">1</div><div class="hint">2</div><div class="hint">3</div><div class="hint">4</div><div class="hint">5</div><div class="hint">6</div><div class="hint">7</div><div class="hint">8</div><div class="hint">9</div></div><div class="main-number"></div></div>
@@ -128,8 +143,9 @@ SOFTWARE.
                 <li>To enter a number, click or touch one of the number buttons below the game board or type a number.</li>
                 <li>To enter a hint, click or touch the &#x270F; button, or hold the SHIFT key while typing a number.</li>
                 <li>To clear a cell, click or touch the &#x274C; button, or press the DELETE key or BACKSPACE key.</li>
-                <li>To reset the game to its initial state, click or touch the "Restart Game" button.</li>
-                <li>To create a new game, click or touch the "Switch to Editor" button.</li>
+                <li>To reset the game to its initial state, click or touch the "Restart" button.</li>
+                <li>To generate a new game, select a difficulty from the drop-down, then click or touch the "New" button.</li>
+                <li>To create a new game of your own, click or touch the "Editor" button.</li>
                 <li>To remove this help text, click or touch the &#x2753; button or press the ? key.</li>
             </ul>
             <p>Game state is saved in the browser history. Use your browser's back and forward functions to undo and redo entries.</p>
@@ -137,7 +153,6 @@ SOFTWARE.
             <p>Licensed under <a href="https://mit-license.org/" target="_blank">MIT License</a>. Source available on <a href="https://github.com/parkscomputing/sudoku" target="_blank">GitHub</a>.</p>
         </div>
     </div>
-
 
     <div class="number-controls">
         <button class="number-button cell" id="num-1">1</button>
@@ -155,16 +170,6 @@ SOFTWARE.
         <button class="cell" id="toggleEditHintMode">&#x270F;</button>
         <button class="cell" id="deleteEntry">&#x274C;</button>
         <button class="cell" id="helpButton">&#x2753;</button>
-    </div>
-
-    <div class="mode-controls">
-        <button id="resetGame" type="button">Restart Game</button>
-        <button id="clearBoard" type="button">Clear the Board</button>
-        <button id="toggleEditMode" type="button">Switch to Editor</button>
-    </div>
-
-    <div class="mode-controls">
-        <a id="shareableLink" href="#">Link to Current Board</a>
     </div>
 
 </body>

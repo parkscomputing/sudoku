@@ -165,11 +165,15 @@ document.addEventListener("DOMContentLoaded", function () {
         updateBoardStateInURL();
     });
 
+    // Function to generate a new board based on selected difficulty
     function generateNewBoard(difficulty) {
+        var solutionCount = 0;
+
         while (true) {
             clearGameBoard();
             fillBoard();
             removeNumbers(difficulty);
+
             if (checkUnique()) {
                 break;
             }
@@ -194,34 +198,41 @@ document.addEventListener("DOMContentLoaded", function () {
     function fillBoard() {
         const n = 9;
 
-        function backtrack(row, col) {
-            if (row === n) {
-                return true;  // Entire board has been filled
-            }
+        for (let row = 0; row < n; ++row) {
+            for (let col = 0; col < n; ++col) {
+                if (boardState[row][col].value === 0) {
+                    const numbers = getShuffledArray();
 
-            if (boardState[row][col].value !== 0) {
-                return (col === n - 1) ? backtrack(row + 1, 0) : backtrack(row, col + 1);
-            }
+                    for (const num of numbers) {
+                        boardState[row][col].value = num;
 
-            const numbers = getShuffledArray();
+                        if (isValidMove(row, col, num)) {
+                            if (fillBoard()) {
+                                boardState[row][col].clue = true;
+                                return true;
+                            }
 
-            for (const num of numbers) {
-                if (isValid(boardState, row, col, num)) {
-                    boardState[row][col].value = num;
-                    boardState[row][col].clue = true;  // Marking the number as a clue
-                
-                    if ((col === n - 1) ? backtrack(row + 1, 0) : backtrack(row, col + 1)) {
-                        return true;  // Continue if the current number allows for a solution
+                            boardState[row][col].value = 0;
+                        }
+                        else {
+                            boardState[row][col].value = 0;
+                        }
                     }
-                    boardState[row][col].value = 0;
-                    boardState[row][col].clue = false;  // Resetting the clue flag
+
+                    return false;
                 }
             }
-        
-            return false;  // If no number fits in the current cell, backtrack
         }
 
-        return backtrack(0, 0);  // Start backtracking from the first cell
+        return true;
+    }
+
+    function checkUnique() {
+        return solveOrCheckUnique();
+    }
+
+    function solveBoard() {
+        return solveOrCheckUnique(true);
     }
 
     function solveOrCheckUnique(fillBoard = false) {
@@ -276,16 +287,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return solutions.length === 1; // Return true if only one solution exists, false otherwise
     }
 
-    function checkUnique(board) {
-        return solveOrCheckUnique(board) === 1;
-    }
-
-    function solveBoard(board) {
-        return solveOrCheckUnique(board, true);
-    }
-
-
-
     function isValid(board, row, col, num) {
         for (let x = 0; x < 9; x++) {
             if (board[row][x].value === num) return false;
@@ -304,6 +305,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function removeNumbers(difficulty) {
         let removalCount;
+        const visited = new Set();
+        let maxIterations = 1000; // Prevent infinite loop
 
         switch (difficulty) {
             case "easy":
@@ -322,53 +325,36 @@ document.addEventListener("DOMContentLoaded", function () {
                 removalCount = 40; // Default to medium
         }
 
-        let removals = 0;
-        const visited = new Set();
+        const maxRemovals = removalCount / 2;
 
-        while (removals < removalCount) {
-            let candidates = [];
+        for (let i = 0; i < maxRemovals; i++) {
+            let row, col;
+            let iterations = 0;
 
-            for (let row = 0; row < 9; row++) {
-                for (let col = 0; col < 9; col++) {
-                    if (boardState[row][col].value !== 0 && !visited.has(`${row},${col}`)) {
-                        let possibleValues = 0;
-
-                        for (let num = 1; num <= 9; num++) {
-                            if (isValid(boardState, row, col, num)) {
-                                possibleValues++;
-                            }
-                        }
-
-                        candidates.push({
-                            row: row,
-                            col: col,
-                            values: possibleValues
-                        });
-                    }
+            do {
+                row = Math.floor(Math.random() * 9);
+                col = Math.floor(Math.random() * 9);
+                iterations++;
+                if (iterations > maxIterations) {
+                    console.error("Max iterations reached. Exiting loop.");
+                    return;
                 }
-            }
+            } while (visited.has(`${row},${col}`) || boardState[row][col].value === 0);
 
-            // Sort cells based on the number of possible values (ascending)
-            candidates.sort((a, b) => a.values - b.values);
+            visited.add(`${row},${col}`);
 
-            if (candidates.length === 0) {
-                break;
-            }
+            let symmetricRow = 8 - row;
+            let symmetricCol = 8 - col;
 
-            let { row, col } = candidates[0];
+            visited.add(`${symmetricRow},${symmetricCol}`);
 
-            let originalValue = boardState[row][col].value;
             boardState[row][col].value = 0;
+            boardState[row][col].clue = false;
 
-            if (checkUnique(boardState)) {
-                removals++;
-                visited.add(`${row},${col}`);
-            } else {
-                boardState[row][col].value = originalValue;
-            }
+            boardState[symmetricRow][symmetricCol].value = 0;
+            boardState[symmetricRow][symmetricCol].clue = false;
         }
     }
-
     const numberButtons = document.querySelectorAll(".number-button");
 
     numberButtons.forEach((button) => {
