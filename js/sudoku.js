@@ -22,109 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-/* The default value for the board state is an easy puzzle, in case there is no 
-puzzle definition supplied as a URL parameter. */
-let boardState = [
-    [
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] }
-    ],
-    [
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] }
-    ],
-    [
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] }
-    ],
-    [
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] }
-    ],
-    [
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] }
-    ],
-    [
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] }
-    ],
-    [
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] }
-    ],
-    [
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] }
-    ],
-    [
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] },
-        { value: 0, clue: false,  hints: [] }
-    ]
-];
+const defaultCell = { value: 0, clue: false, hints: [] };
+const boardSize = 9; // For a 9x9 Sudoku board
+let boardState = Array(boardSize).fill(null).map(() => Array(boardSize).fill(null).map(() => ({ ...defaultCell })));
 
 let isEditingMode = false;
 let isHintMode = false;
@@ -169,15 +69,11 @@ document.addEventListener("DOMContentLoaded", function () {
     function generateNewBoard(difficulty) {
         var solutionCount = 0;
 
-        while (true) {
+        do {
             clearGameBoard();
             fillBoard();
             removeNumbers(difficulty);
-
-            if (checkUnique()) {
-                break;
-            }
-        }
+        } while (!checkUnique());
 
         populateBoardFromState();
         checkBoard();
@@ -198,74 +94,65 @@ document.addEventListener("DOMContentLoaded", function () {
     function fillBoard() {
         const n = 9;
 
-        for (let row = 0; row < n; ++row) {
-            for (let col = 0; col < n; ++col) {
-                if (boardState[row][col].value === 0) {
-                    const numbers = getShuffledArray();
+        function backtrack(row, col) {
+            if (row === n) {
+                return true;  // Entire board has been filled
+            }
 
-                    for (const num of numbers) {
-                        boardState[row][col].value = num;
+            if (boardState[row][col].value !== 0) {
+                return (col === n - 1) ? backtrack(row + 1, 0) : backtrack(row, col + 1);
+            }
 
-                        if (isValidMove(row, col, num)) {
-                            if (fillBoard()) {
-                                boardState[row][col].clue = true;
-                                return true;
-                            }
+            const numbers = getShuffledArray();
 
-                            boardState[row][col].value = 0;
-                        }
-                        else {
-                            boardState[row][col].value = 0;
-                        }
+            for (const num of numbers) {
+                boardState[row][col].visited = false;
+
+                if (isValid(boardState, row, col, num)) {
+                    boardState[row][col].value = num;
+                    boardState[row][col].clue = true;  // Marking the number as a clue
+
+                    if ((col === n - 1) ? backtrack(row + 1, 0) : backtrack(row, col + 1)) {
+                        return true;  // Continue if the current number allows for a solution
                     }
 
-                    return false;
+                    boardState[row][col].value = 0;
+                    boardState[row][col].clue = false;  // Resetting the clue flag
                 }
             }
+
+            return false;  // If no number fits in the current cell, backtrack
         }
 
-        return true;
+        return backtrack(0, 0);  // Start backtracking from the first cell
     }
 
     function checkUnique() {
-        return solveOrCheckUnique();
-    }
-
-    function solveBoard() {
-        return solveOrCheckUnique(true);
-    }
-
-    function solveOrCheckUnique(fillBoard = false) {
-        const solutions = [];
-        let solvedBoard = [];
-
-        function cloneBoardState() {
-            return boardState.map(row => row.map(cell => Object.assign({}, cell)));
-        }
+        let solutionCount = 0;
+        const tempBoard = boardState.map(row => row.map(cell => Object.assign({}, cell)));
 
         function backtrack(row, col) {
             if (row === 9) {
-                if (fillBoard) {
-                    solvedBoard = cloneBoardState();  // Store the solution when solving
-                }
-                solutions.push(1); // Add a marker for a solution
+                solutionCount++;
                 return;
             }
 
-            if (solutions.length >= 2) {
-                return; // Exit early if we have more than one solution
+            if (solutionCount > 1) {
+                return;
             }
 
-            if (boardState[row][col].value === 0) {
+            if (tempBoard[row][col].value === 0) {
                 for (let num = 1; num <= 9; num++) {
-                    if (isValid(boardState, row, col, num)) {
-                        boardState[row][col].value = num;
+                    if (isValid(tempBoard, row, col, num)) {
+                        tempBoard[row][col].value = num;
+
                         if (col === 8) {
                             backtrack(row + 1, 0);
                         } else {
                             backtrack(row, col + 1);
                         }
-                        boardState[row][col].value = 0;
+
+                        tempBoard[row][col].value = 0;
                     }
                 }
             } else {
@@ -279,13 +166,51 @@ document.addEventListener("DOMContentLoaded", function () {
 
         backtrack(0, 0);
 
-        if (fillBoard && solutions.length === 1) {
-            boardState = solvedBoard; // Update boardState with the solved board
-            return true;  // Indicate that the board was successfully solved
+        return solutionCount === 1;
+    }
+
+    function solveBoard() {
+        function backtrack(row, col) {
+            if (row === 9) {
+                return true;
+            }
+
+            if (boardState[row][col].value === 0) {
+                for (let num = 1; num <= 9; num++) {
+                    if (isValid(boardState, row, col, num)) {
+                        boardState[row][col].clue = false;
+                        boardState[row][col].value = num;
+
+                        if (col === 8) {
+                            if (backtrack(row + 1, 0)) {
+                                return true;
+                            }
+                        } else {
+                            if (backtrack(row, col + 1)) {
+                                return true;
+                            }
+                        }
+
+                        boardState[row][col].value = 0;
+                    }
+                }
+            } else {
+                if (col === 8) {
+                    if (backtrack(row + 1, 0)) {
+                        return true;
+                    }
+                } else {
+                    if (backtrack(row, col + 1)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
-        return solutions.length === 1; // Return true if only one solution exists, false otherwise
+        backtrack(0, 0);
     }
+
 
     function isValid(board, row, col, num) {
         for (let x = 0; x < 9; x++) {
@@ -305,8 +230,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function removeNumbers(difficulty) {
         let removalCount;
-        const visited = new Set();
-        let maxIterations = 1000; // Prevent infinite loop
 
         switch (difficulty) {
             case "easy":
@@ -325,36 +248,41 @@ document.addEventListener("DOMContentLoaded", function () {
                 removalCount = 40; // Default to medium
         }
 
-        const maxRemovals = removalCount / 2;
+        let unvisitedCells = [];
 
-        for (let i = 0; i < maxRemovals; i++) {
-            let row, col;
-            let iterations = 0;
+        for (let i = 0; i < 9; i++) {
+            for (let j = 0; j < 9; j++) {
+                unvisitedCells.push([i, j]);
+            }
+        }
 
-            do {
-                row = Math.floor(Math.random() * 9);
-                col = Math.floor(Math.random() * 9);
-                iterations++;
-                if (iterations > maxIterations) {
-                    console.error("Max iterations reached. Exiting loop.");
-                    return;
+        let removals = 0;
+
+        while (removals < removalCount && unvisitedCells.length > 0) {
+            let index = Math.floor(Math.random() * unvisitedCells.length);
+            let [row, col] = unvisitedCells.splice(index, 1)[0];
+
+            // Ensure the cell has not been visited and has a number
+            if (!boardState[row][col].visited && boardState[row][col].value !== 0) {
+                // Preserve the original value
+                let originalValue = boardState[row][col].value;
+
+                // Try to remove the number
+                boardState[row][col].value = 0;
+
+                if (checkUnique()) {
+                    // If still solvable with a unique solution, mark cell as visited
+                    boardState[row][col].visited = true;
+                    removals++;
+                } else {
+                    // Otherwise, revert the removal
+                    boardState[row][col].value = originalValue;
+                    boardState[row][col].visited = true;
                 }
-            } while (visited.has(`${row},${col}`) || boardState[row][col].value === 0);
-
-            visited.add(`${row},${col}`);
-
-            let symmetricRow = 8 - row;
-            let symmetricCol = 8 - col;
-
-            visited.add(`${symmetricRow},${symmetricCol}`);
-
-            boardState[row][col].value = 0;
-            boardState[row][col].clue = false;
-
-            boardState[symmetricRow][symmetricCol].value = 0;
-            boardState[symmetricRow][symmetricCol].clue = false;
+            }
         }
     }
+
     const numberButtons = document.querySelectorAll(".number-button");
 
     numberButtons.forEach((button) => {
