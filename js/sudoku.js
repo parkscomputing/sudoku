@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const numbers = getShuffledArray();
 
             for (const num of numbers) {
-                boardState[row][col].visited = false;
+                boardState[row][col].clue = false;  // Resetting the clue flag
 
                 if (isValid(boardState, row, col, num)) {
                     boardState[row][col].value = num;
@@ -271,13 +271,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 boardState[row][col].value = 0;
 
                 if (checkUnique()) {
-                    // If still solvable with a unique solution, mark cell as visited
-                    boardState[row][col].visited = true;
                     removals++;
+                    boardState[row][col].clue = false;
                 } else {
                     // Otherwise, revert the removal
                     boardState[row][col].value = originalValue;
-                    boardState[row][col].visited = true;
                 }
             }
         }
