@@ -31,8 +31,10 @@ let isHintMode = false;
 
 
 document.addEventListener("DOMContentLoaded", function () {
-    const difficultyDropdown = document.getElementById("difficultyDropdown");
     const params = getUrlParameters();
+    const difficultyDropdown = document.getElementById("difficultyDropdown");
+    const difficulty = getDifficultyFromUrl(params);
+    difficultyDropdown.value = difficulty;
 
     if (setBoardStateFromUrl(params)) {
         populateBoardFromState();
@@ -40,8 +42,6 @@ document.addEventListener("DOMContentLoaded", function () {
         updateBoardStateInURL();
     }
     else {
-        const difficulty = getDifficultyFromUrl(params);
-        difficultyDropdown.value = difficulty;
         generateNewBoard(difficulty);
     }
 
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function getShuffledArray() {
-        let array = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        let array = Array.from({ length: boardSize }, (_, i) => i + 1);
 
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -92,15 +92,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function fillBoard() {
-        const n = 9;
-
         function backtrack(row, col) {
-            if (row === n) {
+            if (row === boardSize) {
                 return true;  // Entire board has been filled
             }
 
             if (boardState[row][col].value !== 0) {
-                return (col === n - 1) ? backtrack(row + 1, 0) : backtrack(row, col + 1);
+                return (col === boardSize - 1) ? backtrack(row + 1, 0) : backtrack(row, col + 1);
             }
 
             const numbers = getShuffledArray();
@@ -112,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     boardState[row][col].value = num;
                     boardState[row][col].clue = true;  // Marking the number as a clue
 
-                    if ((col === n - 1) ? backtrack(row + 1, 0) : backtrack(row, col + 1)) {
+                    if ((col === boardSize - 1) ? backtrack(row + 1, 0) : backtrack(row, col + 1)) {
                         return true;  // Continue if the current number allows for a solution
                     }
 
@@ -132,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const tempBoard = boardState.map(row => row.map(cell => Object.assign({}, cell)));
 
         function backtrack(row, col) {
-            if (row === 9) {
+            if (row === boardSize) {
                 solutionCount++;
                 return;
             }
@@ -142,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             if (tempBoard[row][col].value === 0) {
-                for (let num = 1; num <= 9; num++) {
+                for (let num = 1; num <= boardSize; num++) {
                     if (isValid(tempBoard, row, col, num)) {
                         tempBoard[row][col].value = num;
 
@@ -171,12 +169,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function solveBoard() {
         function backtrack(row, col) {
-            if (row === 9) {
+            if (row === boardSize) {
                 return true;
             }
 
             if (boardState[row][col].value === 0) {
-                for (let num = 1; num <= 9; num++) {
+                for (let num = 1; num <= boardSize; num++) {
                     if (isValid(boardState, row, col, num)) {
                         boardState[row][col].clue = false;
                         boardState[row][col].value = num;
@@ -213,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     function isValid(board, row, col, num) {
-        for (let x = 0; x < 9; x++) {
+        for (let x = 0; x < boardSize; x++) {
             if (board[row][x].value === num) return false;
             if (board[x][col].value === num) return false;
         }
@@ -250,8 +248,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let unvisitedCells = [];
 
-        for (let i = 0; i < 9; i++) {
-            for (let j = 0; j < 9; j++) {
+        for (let i = 0; i < boardSize; i++) {
+            for (let j = 0; j < boardSize; j++) {
                 unvisitedCells.push([i, j]);
             }
         }
@@ -352,8 +350,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.getElementById("resetGame").addEventListener("click", function (event) {
-        for (let row = 0; row < 9; row++) {
-            for (let col = 0; col < 9; col++) {
+        for (let row = 0; row < boardSize; row++) {
+            for (let col = 0; col < boardSize; col++) {
                 const cellData = boardState[row][col];
 
                 if (cellData.clue === false) {
@@ -378,8 +376,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function clearGameBoard() {
-        for (let row = 0; row < 9; row++) {
-            for (let col = 0; col < 9; col++) {
+        for (let row = 0; row < boardSize; row++) {
+            for (let col = 0; col < boardSize; col++) {
                 const cellData = boardState[row][col];
                 cellData.value = 0;
                 cellData.clue = false;
@@ -578,8 +576,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function populateBoardFromState() {
-        for (let row = 0; row < 9; row++) {
-            for (let col = 0; col < 9; col++) {
+        for (let row = 0; row < boardSize; row++) {
+            for (let col = 0; col < boardSize; col++) {
                 const cellData = boardState[row][col];
                 const hintsArray = cellData.hints;
                 const cell = document.getElementById(`cell-${row}-${col}`);
@@ -619,8 +617,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const board = document.getElementById("sudoku-board");
         board.classList.remove("winner");
 
-        for (let row = 0; row < 9; row++) {
-            for (let col = 0; col < 9; col++) {
+        for (let row = 0; row < boardSize; row++) {
+            for (let col = 0; col < boardSize; col++) {
                 const digit = getDigit(row, col);
                 const cell = document.getElementById(`cell-${row}-${col}`);
                 const numberElement = cell.querySelector(".main-number");
@@ -648,12 +646,13 @@ document.addEventListener("DOMContentLoaded", function () {
         return isValidBoard;
     }
 
+    // Sample board parameter:
     // ?board=5C.3C.0P14.0P6.7C.8P6.0P9.0P9.0P-6C.7P.0P4.1C.9C.5C.0P3.0P3.8P78-0P1.9C.8C.3P.4P.0P.5P.6C.0P7-8C.0P.0P.0P9.6C.0P14.0P7.0P2.3C-4C.0P.6P.8C.0P.3C.0P7.0P2.1C-7C.0P.3P.0P9.2C.0P14.8P.0P.6C-0P9.6C.0P9.0P7.0P.0P7.2C.8C.0P-0P.8P3.7P.4C.1C.9C.0P6.0P.5C-0P.0P.0P.0P.8C.0P.0P6.7C.9C
 
     function updateBoardStateInURL() {
         let urlBoardString = "";
-        for (let row = 0; row < 9; row++) {
-            for (let col = 0; col < 9; col++) {
+        for (let row = 0; row < boardSize; row++) {
+            for (let col = 0; col < boardSize; col++) {
                 const cellData = boardState[row][col];
                 const clueOrPlayer = cellData.clue ? 'C' : 'P';
                 urlBoardString += `${cellData.value}${clueOrPlayer}${cellData.hints.join("")}.`;
@@ -665,6 +664,7 @@ document.addEventListener("DOMContentLoaded", function () {
         urlBoardString = urlBoardString.slice(0, -1);  // Remove trailing delimiter
 
         const newURL = new URL(window.location);
+        newURL.searchParams.set("difficulty", difficultyDropdown.value);
         newURL.searchParams.set("board", urlBoardString);
 
         const linkElement = document.getElementById("shareableLink");
@@ -725,14 +725,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // Check row
-        for (let c = 0; c < 9; c++) {
+        for (let c = 0; c < boardSize; c++) {
             if (c !== col && boardState[row][c].value === value) {
                 return false;
             }
         }
 
         // Check column
-        for (let r = 0; r < 9; r++) {
+        for (let r = 0; r < boardSize; r++) {
             if (r !== row && boardState[r][col].value === value) {
                 return false;
             }
